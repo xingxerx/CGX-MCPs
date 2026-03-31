@@ -1,37 +1,21 @@
 services:
-  jcodemunch:
-    image: ghcr.io/jeffglobal/jcodemunch:latest
+  serena:
+    image: serena:latest
+    container_name: cgx-serena
+    build:
+      context: ./serena
+      dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
-      # ADD YOUR REPOS HERE
-      # Windows example:  - /d/MyProject:/workspace/MyProject:ro
-      # macOS/Linux:       - /home/yourname/MyProject:/workspace/MyProject:ro
+      # Repos to analyse — must be mounted for Serena to access them
+      - /d/SYNOID:/workspace/SYNOID
+      - /d/Qallow:/workspace/Qallow
+      # Persist Serena config and session logs across restarts
+      - ./serena-config:/workspaces/serena/config
+    ports:
+      - "9121:9121" # MCP SSE endpoint
+      - "24282:24282" # Web dashboard  http://localhost:24282/dashboard
     environment:
-      - GITHUB_TOKEN=${GITHUB_TOKEN}
-    ports:
-      - "3001:3001"
-
-  mcp-agent-opt:
-    image: ghcr.io/nicholasgasior/mcp-agent-opt:latest
-    restart: unless-stopped
-    volumes:
-      # ADD YOUR REPOS HERE
-      # Windows example:  - /d/MyProject:/workspace/MyProject:ro
-      # macOS/Linux:       - /home/yourname/MyProject:/workspace/MyProject:ro
-    ports:
-      - "3002:3002"
-
-  token-compressor:
-    image: ghcr.io/nicholasgasior/mcp-token-compressor:latest
-    restart: unless-stopped
-    depends_on:
-      - jcodemunch
-      - mcp-agent-opt
-    environment:
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - MCP_UPSTREAM_SERVERS=http://jcodemunch:3001,http://mcp-agent-opt:3002
-    ports:
-      - "3000:3000"
-
-volumes:
-  codemunch-index:
+      - SERENA_DOCKER=1
+    command:
+      - "uv run --directory . serena-mcp-server --transport sse --port 9121 --host 0.0.0.0 --context claude-code"

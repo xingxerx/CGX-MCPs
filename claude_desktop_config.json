@@ -1,16 +1,51 @@
 {
   "mcpServers": {
-    "token-compressor": {
-      "url": "http://localhost:3000/sse"
+    "cgx-serena": {
+      "command": "uvx",
+      "args": [
+        "mcp-compressor",
+        "http://localhost:9121/sse",
+        "--server-name",
+        "serena",
+        "--compression-level",
+        "medium"
+      ],
+      "env": {
+        "PYTHONUTF8": "1"
+      }
     },
-    "jcodemunch": {
-      "url": "http://localhost:3001/sse"
+    "cgx-gitmcp-synoid": {
+      "command": "uvx",
+      "args": [
+        "mcp-compressor",
+        "https://gitmcp.io/xingxerx/SYNOID",
+        "--server-name",
+        "synoid"
+      ],
+      "env": {
+        "PYTHONUTF8": "1"
+      }
     },
-    "mcp-agent-opt": {
-      "url": "http://localhost:3002/sse"
+    "cgx-gitmcp-qallow": {
+      "command": "uvx",
+      "args": [
+        "mcp-compressor",
+        "https://gitmcp.io/xingxerx/Qallow",
+        "--server-name",
+        "qallow"
+      ],
+      "env": {
+        "PYTHONUTF8": "1"
+      }
     },
-    "gitmcp-your-repo": {
-      "url": "https://gitmcp.io/your-username/your-repo"
+    "cgx-token-optimizer": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\xing\\AppData\\Roaming\\npm\\node_modules\\@ooples\\token-optimizer-mcp\\dist\\server\\index.js"
+      ],
+      "env": {
+        "TOKEN_OPTIMIZER_CACHE_DIR": "C:\\Users\\xing\\.token-optimizer-cache"
+      }
     }
   }
 }
