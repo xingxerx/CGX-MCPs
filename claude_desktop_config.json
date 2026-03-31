@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "token-compressor": {
+      "url": "http://localhost:3000/sse"
+    },
+    "jcodemunch": {
+      "url": "http://localhost:3001/sse"
+    },
+    "mcp-agent-opt": {
+      "url": "http://localhost:3002/sse"
+    },
+    "gitmcp-your-repo": {
+      "url": "https://gitmcp.io/your-username/your-repo"
+    }
+  }
+}

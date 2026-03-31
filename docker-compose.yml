@@ -1,0 +1,37 @@
+services:
+  jcodemunch:
+    image: ghcr.io/jeffglobal/jcodemunch:latest
+    restart: unless-stopped
+    volumes:
+      # ADD YOUR REPOS HERE
+      # Windows example:  - /d/MyProject:/workspace/MyProject:ro
+      # macOS/Linux:       - /home/yourname/MyProject:/workspace/MyProject:ro
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    ports:
+      - "3001:3001"
+
+  mcp-agent-opt:
+    image: ghcr.io/nicholasgasior/mcp-agent-opt:latest
+    restart: unless-stopped
+    volumes:
+      # ADD YOUR REPOS HERE
+      # Windows example:  - /d/MyProject:/workspace/MyProject:ro
+      # macOS/Linux:       - /home/yourname/MyProject:/workspace/MyProject:ro
+    ports:
+      - "3002:3002"
+
+  token-compressor:
+    image: ghcr.io/nicholasgasior/mcp-token-compressor:latest
+    restart: unless-stopped
+    depends_on:
+      - jcodemunch
+      - mcp-agent-opt
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - MCP_UPSTREAM_SERVERS=http://jcodemunch:3001,http://mcp-agent-opt:3002
+    ports:
+      - "3000:3000"
+
+volumes:
+  codemunch-index:
